@@ -18,16 +18,16 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LinearRegression
-import statsmodels.api as sm
-import seaborn as  sns
-import plotly as py
-from plotly.offline import iplot
-import plotly.graph_objs as go
+#import statsmodels.api as sm
+#import seaborn as  sns
+#import plotly as py
+#from plotly.offline import iplot
+#import plotly.graph_objs as go
 from sklearn import cluster
 from sklearn.cluster import KMeans
 from mpl_toolkits.mplot3d import Axes3D
 
-
+"""
 # DATA VISUALIZATION
 dataset_2019 = pd.read_csv('2019.csv')
 # NULL DATA
@@ -281,32 +281,42 @@ layout = dict(title = 'Kmeans Clustering 2019',
            projection = {'type': 'mercator'}))
 cluster_map = go.Figure(data = [dataPlot], layout=layout) 
 py.offline.plot(cluster_map)
-
+"""
 
 #%% Clustering 
 
-dataset_2019 = pd.read_csv('2019.csv')
+dataset_2019 = pd.read_csv('2018.csv')
 x_2019 = dataset_2019.iloc[:,3:9].values
 y_2019 = dataset_2019["Score"].values
 
-kmeans = KMeans(n_clusters = 2)
+kmeans = KMeans(n_clusters = 3)
 kmeans.fit(x_2019)
 
 fig = plt.figure(figsize = (10,10))
 ax = fig.add_subplot(111, projection='3d')
-ax1 = fig.add_subplot(111, proje)
 ax.scatter(x_2019[kmeans.labels_==0,0],x_2019[kmeans.labels_==0,1],x_2019[kmeans.labels_==0,2],c = 'r', marker = 'o')
 ax.scatter(x_2019[kmeans.labels_==1,0],x_2019[kmeans.labels_==1,1],x_2019[kmeans.labels_==1,2],c = 'b', marker = '^')
+ax.scatter(x_2019[kmeans.labels_==2,0],x_2019[kmeans.labels_==2,1],x_2019[kmeans.labels_==2,2],c = 'g', marker = 'x')
 
 ax.set_xlabel('GDP per capita')
 ax.set_ylabel('Social support')
 ax.set_zlabel('Healthy life expectancy')
 
+fig = plt.figure(figsize = (10,10))
+ax = fig.add_subplot(111, projection='3d')
 ax.scatter(x_2019[kmeans.labels_==0,3],x_2019[kmeans.labels_==0,4],x_2019[kmeans.labels_==0,5],c = 'r', marker = 'o')
-ax.scatter(x_2019[kmeans.labels_==0,3],x_2019[kmeans.labels_==0,4],x_2019[kmeans.labels_==0,5],c = 'b', marker = '^')
+ax.scatter(x_2019[kmeans.labels_==1,3],x_2019[kmeans.labels_==1,4],x_2019[kmeans.labels_==1,5],c = 'b', marker = '^')
+ax.scatter(x_2019[kmeans.labels_==2,3],x_2019[kmeans.labels_==2,4],x_2019[kmeans.labels_==2,5],c = 'g', marker = 'x')
+
+
+ax.set_xlabel('Freedom to make life choices')
+ax.set_ylabel('Generosity')
+ax.set_zlabel('Perceptions of corruption')
 
 plt.show()
 
+
+#%% Ensemble Learning
 
 
 
