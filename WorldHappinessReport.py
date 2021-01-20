@@ -12,8 +12,6 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn import preprocessing
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.impute import SimpleImputer
@@ -23,6 +21,10 @@ from sklearn.linear_model import LinearRegression
 #import plotly as py
 #from plotly.offline import iplot
 #import plotly.graph_objs as go
+import statsmodels.api as sm
+import seaborn as  sns
+import plotly as py
+import plotly.graph_objs as go
 from sklearn import cluster
 from sklearn.cluster import KMeans
 from mpl_toolkits.mplot3d import Axes3D
@@ -96,6 +98,18 @@ print(model.summary())
 
 # -> Most Significant Features: GDP, Healthy life, Social Support, Freedom to make life choices
 
+# Global happiness of 2019
+data = dict(type = 'choropleth', 
+           locations = dataset_2019['Country or region'],
+           locationmode = 'country names',
+           z = dataset_2019['Overall rank'], 
+           text = dataset_2019['Country or region'],
+           colorbar = {'title':'Happiness ranking'})
+layout = dict(title = 'Global Happiness in 2019', 
+             geo = dict(showframe = False, 
+                       projection = {'type': 'mercator'}))
+cluster_map = go.Figure(data = [data], layout=layout)
+py.offline.plot(cluster_map)
 
 
 # Visualizing Features
@@ -247,6 +261,22 @@ plt.xlabel("Years")
 plt.ylabel("GDP coefficient")
 plt.title("GDP Coefficient According To Years")
 plt.show()
+
+
+# Change in happiness score by years
+plt.plot(dataset_2015['Happiness Score'], 'b', label='2015')
+plt.plot(dataset_2016['Happiness Score'], 'g', label='2016')
+plt.plot(dataset_2017['Happiness.Score'], 'r', label='2017')
+plt.plot(dataset_2018['Score'], 'yellow', label='2018')
+plt.plot(dataset_2019['Score'], 'black', label='2019')
+plt.title('Happiness Score of 2015 & 2016 & 2017 & 2018 & 2019 ', fontsize=18)
+plt.xlabel('Rank of Country', fontsize=16)
+plt.ylabel('Happiness Score', fontsize=16)
+plt.legend()
+plt.show()
+
+
+
 
 
 # CLUSTERING 
