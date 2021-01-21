@@ -29,10 +29,9 @@ Görkem Savran
 
 - Creating models using ensemble learning methods and comparing these models
 
-Structure: 
+# Structure: 
 
 
-Language, version, and main file:
-
+# Language, version, and main file:
 Python 3.8.5
 WorldHappinessReport.py
