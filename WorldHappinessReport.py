@@ -16,53 +16,56 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LinearRegression
-#import statsmodels.api as sm
-#import seaborn as  sns
-#import plotly as py
-#from plotly.offline import iplot
-#import plotly.graph_objs as go
+from sklearn.ensemble import AdaBoostClassifier, VotingClassifier, BaggingClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import train_test_split
 import statsmodels.api as sm
 import seaborn as  sns
 import plotly as py
 import plotly.graph_objs as go
 from sklearn import cluster
 from sklearn.cluster import KMeans
-from mpl_toolkits.mplot3d import Axes3D
+import warnings
+from sklearn.exceptions import ConvergenceWarning
+warnings.filterwarnings(action='ignore', category=ConvergenceWarning)
 
-"""
-# DATA VISUALIZATION
+
+#%% DATA VISUALIZATION
 dataset_2019 = pd.read_csv('2019.csv')
 # NULL DATA
-#print(dataset_2019.isnull().sum()) #-> Boş veri yok..
+#print(dataset_2019.isnull().sum()) #-> There is no null data..
 
 # HEATMAP
 cor =dataset_2019.corr()
 sns.heatmap(cor, square = True)
-plt.show()
+plt.savefig("Heatmap.pdf")
+plt.close()
 
 # PAIRPLOT
 sns.pairplot(dataset_2019)
-plt.show()
+plt.savefig("Pairplot.pdf")
+plt.close()
 
 
-
+#%% Comparison of 7 countries according to features
 new_dataset = dataset_2019[(dataset_2019['Country or region'].isin(['Finland','Denmark','Norway', 'Moldova','Turkey', 'Tanzania','Afghanistan']))]
 
 ax = new_dataset.plot(y="Social support", x="Country or region", kind="bar",color='C3')
 new_dataset.plot(y="GDP per capita", x="Country or region", kind="bar", ax=ax, color="C1")
 new_dataset.plot(y="Healthy life expectancy", x="Country or region", kind="bar", ax=ax, color="C2")
-plt.show()
+plt.savefig("ComparisonOf7CountriesAccordingToMostSignificantFeatures.pdf")
+plt.close()
 
 ax = new_dataset.plot(y="Freedom to make life choices", x="Country or region", kind="bar",color='C3')
 new_dataset.plot(y="Generosity", x="Country or region", kind="bar", ax=ax, color="C1",)
 new_dataset.plot(y="Perceptions of corruption", x="Country or region", kind="bar", ax=ax, color="C2",)
-plt.show()
+plt.savefig("ComparisonOf7CountriesAccordingToLeastSignificantFeatures.pdf")
+plt.close()
 
-
-
+#%% Finding most significant features with backward elimination
 
 dataset_2019 = pd.read_csv('2019.csv')
-
 
 X_one = dataset_2019.iloc[:, 0].values
 X_one = pd.DataFrame(data = X_one, columns = ['Overall rank'])
@@ -74,13 +77,9 @@ X_ikiBinOnDokuz = pd.concat([X_one, X_two], axis=1)
 features_2019 = X_ikiBinOnDokuz.iloc[:,1:7]
 features_2019 = features_2019.to_numpy()
 
-
 y_2019 = dataset_2019.iloc[:,2].values
 y_2019 = pd.DataFrame(data= y_2019, columns=['Score'])
 
-
-
-# TASK 1 -> Finding most significant features
 X = np.append(arr = np.ones((156,1)).astype(int), values= features_2019, axis=1)
 X_opt = X[:,[0,1,2,3,4,5,6]]
 model = sm.OLS(y_2019, X_opt).fit()
@@ -98,7 +97,7 @@ print(model.summary())
 
 # -> Most Significant Features: GDP, Healthy life, Social Support, Freedom to make life choices
 
-# Global happiness of 2019
+#%% Global happiness of 2019
 data = dict(type = 'choropleth', 
            locations = dataset_2019['Country or region'],
            locationmode = 'country names',
@@ -108,11 +107,10 @@ data = dict(type = 'choropleth',
 layout = dict(title = 'Global Happiness in 2019', 
              geo = dict(showframe = False, 
                        projection = {'type': 'mercator'}))
-cluster_map = go.Figure(data = [data], layout=layout)
-py.offline.plot(cluster_map)
+global_map = go.Figure(data = [data], layout=layout)
+py.offline.plot(global_map)
 
-
-# Visualizing Features
+#%% Visualizing Features
 fig , axs = plt.subplots(1,2, figsize = (20,10))
 fig.set_size_inches(30, 10.5, forward=True)
 
@@ -131,10 +129,11 @@ axs[1].scatter(y_2019,features_2019.loc[:,5],c = 'orange', marker = 'x', label =
 axs[1].set_xlabel('Score')
 axs[1].title.set_text('Visualizing Least Significant Features')
 axs[1].legend()
-plt.show()
+plt.savefig("VisualizingFeatures.pdf")
+plt.close()
 
 
-# TASK 2 -> Predict 2019 data from 2018 data and calculate R2
+#%% Predict 2019 data from 2018 data and calculate R2
 dataset_2018 = pd.read_csv('2018.csv')
 X_one_2018 = dataset_2018.iloc[:, 0].values
 X_one_2018 = pd.DataFrame(data = X_one_2018, columns = ['Overall rank'])
@@ -143,7 +142,7 @@ X_two_2018 = dataset_2018.iloc[:, 3:8].values
 X_two_2018 = pd.DataFrame(data = X_two_2018, columns = ['GDP per capita', 'Social support','Healthy life expectancy', 'Freedom to make life choices', 'Generosity'])
 x_2018 = pd.concat([X_one_2018, X_two_2018], axis=1)
 
-
+# Data preproccessing for 2018 data
 imputer = SimpleImputer(missing_values=np.nan, strategy="mean")
 corruption =dataset_2018.iloc[:, 8].values
 imputer = imputer.fit(corruption.reshape(-1, 1))
@@ -155,7 +154,6 @@ X_ikiBinOnSekiz = pd.concat([x_2018, corruption], axis = 1)
 features_2018 = X_ikiBinOnSekiz.iloc[:,1:7]
 features_2018 = features_2018.to_numpy()
 
-# Label'ları ayırma
 y_2018 = dataset_2018.iloc[:,2].values
 y_2018 = pd.DataFrame(data= y_2018, columns=['Score'])
 
@@ -170,19 +168,18 @@ r2 = r2_score(y_2019, predict)
 #mean_squarred = mean_squared_error(y_2019, predict)
 
 # score = lin_reg.score(features_2019, y_2019)
-# print("Lin:" ,score)
+# print("Linear Regression Score:" ,score)
 
 print ( "R2 score: ", r2)
 #print("Mean Squarred Error: ", mean_squarred)
 
 
-
-# TASK 3 -> Showing how GDP impacts by years
+#%% Showing how GDP impacts by years
 
 coefofGDPAccordingToYears = []
 
 dataset_2015 = pd.read_csv('2015.csv')
-#print(dataset_2015.isnull().sum()) -> boş veri yok
+#print(dataset_2015.isnull().sum())
 features_2015 = dataset_2015.iloc[:, 5:12].values
 
 y_2015 = dataset_2015.iloc[:,3].values
@@ -195,7 +192,7 @@ coefofGDPAccordingToYears.append(coef_2015[0])
 
 
 dataset_2016 = pd.read_csv('2016.csv')
-#print(dataset_2016.isnull().sum()) -> boş veri yok
+#print(dataset_2016.isnull().sum())
 features_2016 = dataset_2016.iloc[:, 6:14].values
 
 y_2016 = dataset_2016.iloc[:,3].values
@@ -208,7 +205,7 @@ coefofGDPAccordingToYears.append(coef_2016[0])
 
 
 dataset_2017 = pd.read_csv('2017.csv')
-#print(dataset_2017.isnull().sum()) -> Boş veri yok
+#print(dataset_2017.isnull().sum())
 features_2017 = dataset_2017.iloc[:, 5:12].values
 y_2017 = dataset_2017.iloc[:,2].values
 
@@ -242,7 +239,7 @@ coefofGDPAccordingToYears.append(coef_2018[0])
 
 
 dataset_2019 = pd.read_csv('2019.csv')
-#print(dataset_2019.isnull().sum())-> Boş veri yok..
+#print(dataset_2019.isnull().sum())
 
 features_2019 = dataset_2019.iloc[:, 3:9].values
 y_2019 = dataset_2019.iloc[:,2].values
@@ -260,10 +257,10 @@ plt.plot(listOfYears,coefofGDPAccordingToYears, linewidth=4)
 plt.xlabel("Years")
 plt.ylabel("GDP coefficient")
 plt.title("GDP Coefficient According To Years")
-plt.show()
+plt.savefig("GDPCoefficientAccordingToYears.pdf")
+plt.close()
 
-
-# Change in happiness score by years
+#%% Change in happiness score by years
 plt.plot(dataset_2015['Happiness Score'], 'b', label='2015')
 plt.plot(dataset_2016['Happiness Score'], 'g', label='2016')
 plt.plot(dataset_2017['Happiness.Score'], 'r', label='2017')
@@ -273,13 +270,10 @@ plt.title('Happiness Score of 2015 & 2016 & 2017 & 2018 & 2019 ', fontsize=18)
 plt.xlabel('Rank of Country', fontsize=16)
 plt.ylabel('Happiness Score', fontsize=16)
 plt.legend()
-plt.show()
+plt.savefig("HappinessScoreAccordingToYears.pdf")
+plt.close()
 
-
-
-
-
-# CLUSTERING 
+#%% MAP CLUSTERING 
 country=dataset_2019[dataset_2019.columns[1]]
 data= dataset_2019.iloc[:,2:]
 
@@ -311,13 +305,10 @@ layout = dict(title = 'Kmeans Clustering 2019',
            projection = {'type': 'mercator'}))
 cluster_map = go.Figure(data = [dataPlot], layout=layout) 
 py.offline.plot(cluster_map)
-"""
+
 
 #%% Clustering 
-
-dataset_2019 = pd.read_csv('2018.csv')
 x_2019 = dataset_2019.iloc[:,3:9].values
-y_2019 = dataset_2019["Score"].values
 
 kmeans = KMeans(n_clusters = 3)
 kmeans.fit(x_2019)
@@ -331,6 +322,8 @@ ax.scatter(x_2019[kmeans.labels_==2,0],x_2019[kmeans.labels_==2,1],x_2019[kmeans
 ax.set_xlabel('GDP per capita')
 ax.set_ylabel('Social support')
 ax.set_zlabel('Healthy life expectancy')
+plt.savefig("3FeaturesMostSignificantClustering.pdf")
+plt.close()
 
 fig = plt.figure(figsize = (10,10))
 ax = fig.add_subplot(111, projection='3d')
@@ -343,12 +336,60 @@ ax.set_xlabel('Freedom to make life choices')
 ax.set_ylabel('Generosity')
 ax.set_zlabel('Perceptions of corruption')
 
-plt.show()
+plt.savefig("3FeaturesLeastSignificantClustering.pdf")
+plt.close()
 
 
 #%% Ensemble Learning
 
+x_2019 = dataset_2019.iloc[:,3:6].values
+kmeans = KMeans(n_clusters = 3)
+kmeans.fit(x_2019)
+y_2019 = kmeans.labels_
 
+x_2018 = features_2018.to_numpy()[:,:3]
+kmeans = KMeans(n_clusters = 3)
+kmeans.fit(x_2018)
+y_2018 = kmeans.labels_
+
+X = np.concatenate((x_2018,x_2019))
+y = np.concatenate((y_2018,y_2019))
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+
+for i in range(1, 10):
+    clf = AdaBoostClassifier(base_estimator=DecisionTreeClassifier(max_depth=2) ,random_state=0, n_estimators=i)
+    clf.fit(X_train, y_train)
+    score = clf.score(X_train, y_train)
+    print(f"({i} Estimators)AdaBoost Score: {score}")
+
+base_clasifiers = []
+for h in range(1, 11, 1):
+    layers = tuple()
+    for l in range(1, h+1, 1):
+        layers = (2**l,) + layers
+    mlp = MLPClassifier(hidden_layer_sizes=layers)
+    base_clasifiers.append(mlp)
+
+voting_classifier = VotingClassifier(
+    estimators=[(str(idx), mlp) for idx, mlp in enumerate(base_clasifiers)],
+    voting='hard')
+
+all_classifiers = base_clasifiers + [voting_classifier]
+
+for idx, clf in enumerate(all_classifiers):
+    clf.fit(X_train, y_train)
+    score = clf.score(X_test, y_test)
+    if idx != len(all_classifiers) - 1:
+        pass
+    else:
+        print("-"*50)
+        print(f"Voting Classifier with different MLPs Accuracy: {score}")
+
+clf = BaggingClassifier(n_estimators=10, random_state=0)
+clf.fit(X_train, y_train)
+score = clf.score(X_test, y_test)
+print(f"Bagging Score: {score}")
 
 
 
