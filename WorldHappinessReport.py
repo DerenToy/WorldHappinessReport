@@ -32,7 +32,7 @@ warnings.filterwarnings(action='ignore', category=ConvergenceWarning)
 
 
 #%% DATA VISUALIZATION
-dataset_2019 = pd.read_csv('2019.csv')
+dataset_2019 = pd.read_csv('datasets/2019.csv')
 # NULL DATA
 #print(dataset_2019.isnull().sum()) #-> There is no null data..
 
@@ -65,7 +65,7 @@ plt.close()
 
 #%% Finding most significant features with backward elimination
 
-dataset_2019 = pd.read_csv('2019.csv')
+dataset_2019 = pd.read_csv('datasets/2019.csv')
 
 X_one = dataset_2019.iloc[:, 0].values
 X_one = pd.DataFrame(data = X_one, columns = ['Overall rank'])
@@ -134,7 +134,7 @@ plt.close()
 
 
 #%% Predict 2019 data from 2018 data and calculate R2
-dataset_2018 = pd.read_csv('2018.csv')
+dataset_2018 = pd.read_csv('datasets/2018.csv')
 X_one_2018 = dataset_2018.iloc[:, 0].values
 X_one_2018 = pd.DataFrame(data = X_one_2018, columns = ['Overall rank'])
 
@@ -178,7 +178,7 @@ print ( "R2 score: ", r2)
 
 coefofGDPAccordingToYears = []
 
-dataset_2015 = pd.read_csv('2015.csv')
+dataset_2015 = pd.read_csv('datasets/2015.csv')
 #print(dataset_2015.isnull().sum())
 features_2015 = dataset_2015.iloc[:, 5:12].values
 
@@ -191,7 +191,7 @@ coef_2015 = lin_reg2015.coef_
 coefofGDPAccordingToYears.append(coef_2015[0])
 
 
-dataset_2016 = pd.read_csv('2016.csv')
+dataset_2016 = pd.read_csv('datasets/2016.csv')
 #print(dataset_2016.isnull().sum())
 features_2016 = dataset_2016.iloc[:, 6:14].values
 
@@ -204,7 +204,7 @@ coef_2016 = lin_reg2016.coef_
 coefofGDPAccordingToYears.append(coef_2016[0])
 
 
-dataset_2017 = pd.read_csv('2017.csv')
+dataset_2017 = pd.read_csv('datasets/2017.csv')
 #print(dataset_2017.isnull().sum())
 features_2017 = dataset_2017.iloc[:, 5:12].values
 y_2017 = dataset_2017.iloc[:,2].values
@@ -216,7 +216,7 @@ coef_2017= lin_reg2017.coef_
 coefofGDPAccordingToYears.append(coef_2017[0])
 
 
-dataset_2018 = pd.read_csv('2018.csv')
+dataset_2018 = pd.read_csv('datasets/2018.csv')
 
 X_one_2018 = dataset_2018.iloc[:, 3:8].values
 X_one_2018 = pd.DataFrame(X_one_2018)
@@ -238,7 +238,7 @@ coef_2018= lin_reg2018.coef_
 coefofGDPAccordingToYears.append(coef_2018[0])
 
 
-dataset_2019 = pd.read_csv('2019.csv')
+dataset_2019 = pd.read_csv('datasets/2019.csv')
 #print(dataset_2019.isnull().sum())
 
 features_2019 = dataset_2019.iloc[:, 3:9].values
@@ -390,26 +390,6 @@ clf = BaggingClassifier(n_estimators=10, random_state=0)
 clf.fit(X_train, y_train)
 score = clf.score(X_test, y_test)
 print(f"Bagging Score: {score}")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
