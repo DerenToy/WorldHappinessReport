@@ -48,7 +48,7 @@ Görkem Savran
 │   ├── globalmap.png<br />
 │   ├── happines2019.png<br />
 │   ├── heatmap.png<br />
-│   ├── main.tex<br />
+│   ├── Report.tex<br />
 │   ├── ols.png<br />
 │   ├── pairplot.png<br />
 │   ├── r2.png<br />
