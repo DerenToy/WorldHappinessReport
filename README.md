@@ -30,8 +30,44 @@ Görkem Savran
 - Creating models using ensemble learning methods and comparing these models
 
 # Structure: 
+/WorldHappinessReport/
+├── 3FeaturesLeastSignificantClustering.pdf
+├── 3FeaturesMostSignificantClustering.pdf
+├── ComparisonOf7CountriesAccordingToLeastSignificantFeatures.pdf
+├── ComparisonOf7CountriesAccordingToMostSignificantFeatures.pdf
+├── datasets
+│   ├── 2015.csv
+│   ├── 2016.csv
+│   ├── 2017.csv
+│   ├── 2018.csv
+│   └── 2019.csv
+├── GDPCoefficientAccordingToYears.pdf
+├── HappinessScoreAccordingToYears.pdf
+├── Heatmap.pdf
+├── Pairplot.pdf
+├── README.md
+├── report_source
+│   ├── clustering3.png
+│   ├── clusteringmap.png
+│   ├── country.png
+│   ├── ensembleLearning.png
+│   ├── features.png
+│   ├── gdp.png
+│   ├── globalmap.png
+│   ├── happines2019.png
+│   ├── heatmap.png
+│   ├── main.tex
+│   ├── ols.png
+│   ├── pairplot.png
+│   ├── r2.png
+│   └── score.png
+├── requirements.txt
+├── temp-plot.html
+├── VisualizingFeatures.pdf
+├── WorldHappinessReport.pdf
+└── WorldHappinessReport.py
 
 
-# Language, version, and main file:
+# Language, version, and main file: 
 Python 3.8.5
 WorldHappinessReport.py
