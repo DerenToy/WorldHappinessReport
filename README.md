@@ -39,6 +39,7 @@ Görkem Savran
 │   └── 2019.csv<br />
 ├── README.md<br />
 ├── report_source<br />
+│   ├── Report.tex<br />
 │   ├── clustering3.png<br />
 │   ├── clusteringmap.png<br />
 │   ├── country.png<br />
@@ -48,7 +49,6 @@ Görkem Savran
 │   ├── globalmap.png<br />
 │   ├── happines2019.png<br />
 │   ├── heatmap.png<br />
-│   ├── Report.tex<br />
 │   ├── ols.png<br />
 │   ├── pairplot.png<br />
 │   ├── r2.png<br />
