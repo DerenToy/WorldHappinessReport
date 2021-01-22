@@ -60,5 +60,6 @@ Görkem Savran
 
 
 # Language, version, and main file: 
-Python 3.8.5
-WorldHappinessReport.py
+Language: Python<br />
+Version: 3.8.5<br />
+Main File: WorldHappinessReport.py<br />
