@@ -30,7 +30,7 @@ Görkem Savran
 - Creating models using ensemble learning methods and comparing these models
 
 # Structure: 
-/WorldHappinessReport/
+/WorldHappinessReport/\n
 ├── 3FeaturesLeastSignificantClustering.pdf
 ├── 3FeaturesMostSignificantClustering.pdf
 ├── ComparisonOf7CountriesAccordingToLeastSignificantFeatures.pdf
